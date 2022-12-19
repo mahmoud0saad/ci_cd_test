@@ -1,0 +1,30 @@
+on: push
+name: "Build & Release"
+jobs:
+  build:
+    name: Build & Release
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.2.0'
+      - run: flutter pub get
+      - run: flutter build apk --debug --split-per-abi
+      - name: Archive files
+        run: |
+          sudo apt-get update
+          sudo apt-get install zip
+          zip -r archive.zip *
+      - name: Upload to gdrive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+          filename: "build/app/outputs/apk/release/app-release.apk"
+          folderId: "14RnuNB90_UYybkvy-PTGko9GJycL1miw"
+          name: "documentation.zip" # optional string
+          overwrite: "true" # optional boolean
+          mimeType: "application/vnd.android.package-archive"
