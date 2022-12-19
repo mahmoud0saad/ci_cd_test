@@ -15,7 +15,7 @@ jobs:
       - run: flutter pub get
       - run: flutter build apk --release --no-sound-null-safety
       - name: Upload to gdrive
-        uses: adityak74/google-drive-upload-git-action@main
+        uses: adityak74/google-drive-upload-git-action@v0.3
         with:
           credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
           filename: "build/app/outputs/flutter-apk/app-release.apk"
@@ -23,3 +23,4 @@ jobs:
           overwrite: "true" # optional boolean
           mimeType: "application/vnd.android.package-archive"
  
+
