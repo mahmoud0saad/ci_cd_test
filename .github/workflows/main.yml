@@ -19,7 +19,7 @@ jobs:
         with:
           credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
           filename: "build/app/outputs/flutter-apk/app-release.apk"
-          folderId: "14RnuNB90_UYybkvy-PTGko9GJycL1miw"
+          folderId:  ${{ secrets.FOLDERID }}
           overwrite: "true" # optional boolean
           mimeType: "application/vnd.android.package-archive"
  
