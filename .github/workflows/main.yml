@@ -13,14 +13,21 @@ jobs:
         with:
           flutter-version: '2.2.0'
       - run: flutter pub get
-      - run: flutter build apk --release --no-sound-null-safety
-      - name: Upload to gdrive
-        uses: adityak74/google-drive-upload-git-action@v0.3
+      - uses: NiklasLehnfeld/flutter-android-build-action@v1
+        id: android-build
         with:
-          credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
-          filename: "build/app/outputs/flutter-apk/app-release.apk"
-          folderId:  ${{ secrets.FOLDERID }}
-          overwrite: "true" # optional boolean
-          mimeType: "application/vnd.android.package-archive"
- 
+          release: true
+          keystore: ${{ secrets.KEYSTORE }}
+          keystore-pwd: "${{ secrets.KEYSTORE_PASSWORD }}"
+          key-pwd: "${{ secrets.KEY_PASSWORD }}"
+      - name: Archive APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-apk
+          path: ${{ steps.android-build.outputs.apk-path }}
+      - name: Archive AAB
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-aab
+          path: ${{ steps.android-build.outputs.aab-path }}
  
